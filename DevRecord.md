@@ -49,5 +49,24 @@
 - [ ] try...catch 錯誤處理預想
 
 ## 架構
+🕒 <time>2020-10-02</time>
 ![imgur](https://i.imgur.com/AmSAypX.jpg)
 ![Imgur](https://imgur.com/J0e4VnQ.png)
+
+## 外部紀錄
+🕒 <time>2020-10-07</time>
+- [TypeScript](https://github.com/waynelens/MarkDown-Note/tree/master/Web/TypeScript)
+
+## issue
+🕒 <time>2020-10-07</time>
+- Log追蹤
+- 文件撰寫
+- Restful API的安全和型別健壯
+- 程式碼混淆
+- 服務切割 (比如: 聊天包成插件出去)
+- 信息隊列 (redis、NoSQL)
+- SRE
+- Nginx、server、docker配置、cloudflare
+- Serverless
+- azure服務，比如email
+- 測試 (自己的 & 第三方弱點掃描 & 各種掃描評級)
