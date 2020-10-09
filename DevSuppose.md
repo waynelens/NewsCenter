@@ -70,3 +70,4 @@
 - azure服務，比如email
 - 測試 (自己的 & 第三方弱點掃描 & 各種掃描評級)
 - [統一API的輸出結果](https://ithelp.ithome.com.tw/articles/10198206)
+- [統一API的輸出結果2](https://ronsun.github.io/content/20190317-webapi-response-data-format.html)
