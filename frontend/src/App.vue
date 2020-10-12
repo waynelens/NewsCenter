@@ -34,21 +34,19 @@
     </v-app-bar>
 
     <v-main>
-      <HelloWorld></HelloWorld>
+      <CheckFile></CheckFile>
     </v-main>
-
   </v-app>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import CheckFile from "./components/CheckFile.vue";
 
 @Component({
-  components:{
-    HelloWorld
+  components: {
+    CheckFile
   }
 })
-
 export default class App extends Vue {}
 </script>
