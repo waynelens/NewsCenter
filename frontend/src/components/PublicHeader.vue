@@ -212,7 +212,7 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class CheckFile extends Vue {
+export default class PublicHeader extends Vue {
   // data
   bookMarkSwitch = false;
   disturbs = ["For One Hour", "Until Tomorrow", "Forever"];
