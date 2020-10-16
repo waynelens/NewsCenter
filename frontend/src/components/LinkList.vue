@@ -1,10 +1,5 @@
 <template>
   <div class="linklist">
-    <div id="addLink">
-      <v-icon>mdi-plus-thick</v-icon>
-      <p>Add new source</p>
-    </div>
-
     <v-list flat>
       <v-subheader>MY PUBLIC SOURCES</v-subheader>
       <v-list-item-group v-model="link" color="primary">

@@ -4,14 +4,15 @@
       <PublicHeader></PublicHeader>
     </v-app-bar>
 
-    <v-navigation-drawer bottom expand-on-hover app>
+    <!-- <v-navigation-drawer expand-on-hover app mini-variant mini-variant-width="256"> -->
+    <v-navigation-drawer app>
       <PublicNavDrawer></PublicNavDrawer>
     </v-navigation-drawer>
 
-    <v-content>
+    <v-main>
       <router-view></router-view>
       <Article></Article>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 
@@ -25,7 +26,7 @@ import Article from "./components/Article.vue";
   components: {
     PublicHeader,
     PublicNavDrawer,
-    Article,
+    Article
   }
 })
 export default class App extends Vue {}
