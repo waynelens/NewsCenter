@@ -9,12 +9,13 @@
 
 ## 預計技術棧
 #### 前端
-- [ ] Vue.js
+- [x] Vue.js
     - Vue Cli
     - Client Side Render
+    - Vuetify-loader
 - [ ] Vue-i18n
 - [ ] PWA
-- [ ] TypeScript
+- [x] TypeScript
 - [ ] Google Analytics
 - [ ] Eslint
 - [ ] SEO

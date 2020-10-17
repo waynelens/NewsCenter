@@ -10,3 +10,7 @@
     - Vuetify
     - Typescript: the project will be Class-Base
     - vue-property-decorator
+
+### 2020-10-17
+- Config ```Vuetufy-loader```; Auto import essential components.
+- Layout Component create.
