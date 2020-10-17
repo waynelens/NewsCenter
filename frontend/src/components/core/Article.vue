@@ -35,7 +35,7 @@
 import { Vue, Component } from "vue-property-decorator";
 
 @Component
-export default class Article extends Vue {}
+export default class PublicArticle extends Vue {}
 </script>
 
 <style>
