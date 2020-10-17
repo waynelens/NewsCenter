@@ -14,3 +14,7 @@
 ### 2020-10-17
 - Config ```Vuetufy-loader```; Auto import essential components.
 - Layout Component create.
+- Config ```Vuetify``` constructor
+    - Dark / Light theme switch by Vuex.
+    - Vuetify component can load public "Color Chip"-- Lighr theme and Dark theme. 
+    When I switch theme, Vuetify auto set the proper color on components.
