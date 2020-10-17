@@ -13,13 +13,15 @@ export default new Vuex.Store({
       // 測試
       status: true,
       auth: "Github"
-    }
+    },
+    themeStatus: true,
   },
   mutations: {
     switchBookMarkStatus: (state, mode: boolean) => state.bookMarkStatus = mode,
     switchDisturbStatus: (state, mode: string) => state.disturbStatus = mode,
     switchLayoutPanelStatus: (state) => state.layoutPanelStatus = !state.layoutPanelStatus,
     switchlinkTagListStatus: (state,mode:string) => state.linkTagListStatus = mode,
+    switchThemeStatus: (state,mode:boolean) => state.themeStatus = mode,
   },
   actions: {},
   modules: {},

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-app-bar app flat>
+    <v-app-bar app flat color="bg1">
       <PublicHeader></PublicHeader>
     </v-app-bar>
 
@@ -9,6 +9,7 @@
       app
       mini-variant
       mini-variant-width="1"
+      color="bg3"
     >
       <PublicNavDrawer></PublicNavDrawer>
     </v-navigation-drawer>

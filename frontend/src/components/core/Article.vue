@@ -1,6 +1,6 @@
 <template>
   <div class="article">
-    <v-card class="mx-auto" max-width="350">
+    <v-card max-width="300" rounded="xl" color="bg3">
       <v-card-title d-flex class="justify-space-between">
         <v-icon large left>
           mdi-twitter
@@ -39,6 +39,9 @@ export default class PublicArticle extends Vue {}
 </script>
 
 <style>
+.article{
+  margin: 15px;
+}
 </style>
 
 
