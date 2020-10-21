@@ -27,7 +27,7 @@
 - [ ] Nginx
 - [ ] Log catch
 - [ ] Restful
-- [ ] .Net Core
+- [x] .Net Core
 - [ ] SSL、Domain Apply
 - [ ] Sql Server 
 

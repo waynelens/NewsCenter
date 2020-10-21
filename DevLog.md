@@ -18,3 +18,7 @@
     - Dark / Light theme switch by Vuex.
     - Vuetify component can load public "Color Chip"-- Lighr theme and Dark theme. 
     When I switch theme, Vuetify auto set the proper color on components.
+
+### 2020-10-21
+- Backend: Web API Create
+- Init Models
