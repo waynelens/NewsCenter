@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NewCenter.Models
 {
-    public class TagedNews:BaseModel
+    public class TagedNewsModel:BaseModel
     {
         // Ref News
         public int RefNewsId { get; set; }
