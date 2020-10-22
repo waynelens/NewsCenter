@@ -22,3 +22,6 @@
 ### 2020-10-21
 - Backend: Web API Create
 - Init Models
+
+### 2020-10-22
+- Code First Success: Initial Migration.

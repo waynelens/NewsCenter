@@ -29,7 +29,7 @@
 - [ ] Restful
 - [x] .Net Core
 - [ ] SSL、Domain Apply
-- [ ] Sql Server 
+- [x] Sql Server 
 
 #### 測試
 - [ ] Selenium
