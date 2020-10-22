@@ -9,6 +9,7 @@ namespace NewCenter.Models
     public class TagModel:BaseModel
     {
         [StringLength(50)]
+        [Required]
         public string Name { get; set; }
     }
 }

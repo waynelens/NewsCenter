@@ -15,15 +15,18 @@ namespace NewCenter.Models
         public int Id { get; set; }
 
         [Column(TypeName = "datetime2(7)")]
+        [Required]
         public DateTime CreatTime { get; set; }
 
         [Column(TypeName = "datetime2(7)")]
         [AllowNull]
         public DateTime EditTime { get; set; }
 
+        [Required]
         public bool IsDelete { get; set; }
 
         // ref User table
+        [Required]
         public int RefCreatorId { get; set; }
 
         [AllowNull]
