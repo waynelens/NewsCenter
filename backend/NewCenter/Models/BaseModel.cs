@@ -19,8 +19,7 @@ namespace NewCenter.Models
         public DateTime CreatTime { get; set; }
 
         [Column(TypeName = "datetime2(7)")]
-        [AllowNull]
-        public DateTime EditTime { get; set; }
+        public DateTime? EditTime { get; set; }
 
         [Required]
         public bool IsDelete { get; set; }
@@ -29,7 +28,6 @@ namespace NewCenter.Models
         [Required]
         public int RefCreatorId { get; set; }
 
-        [AllowNull]
-        public int RefEditorId { get; set; }
+        public int? RefEditorId { get; set; }
     }
 }

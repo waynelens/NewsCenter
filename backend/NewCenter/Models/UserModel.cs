@@ -17,11 +17,9 @@ namespace NewCenter.Models
 
         [StringLength(50)]
         [EmailAddress]
-        [AllowNull]
         public string Email { get; set; }
 
         [Column(TypeName ="nvarchar(Max)")]
-        [AllowNull]
         public string Password { get; set; }
 
         [Column(TypeName ="nvarchar(Max)")]

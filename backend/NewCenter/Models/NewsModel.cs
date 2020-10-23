@@ -14,7 +14,6 @@ namespace NewCenter.Models
         [Column(TypeName ="nvarchar(Max)")]
         public string Url { get; set; }
 
-        [AllowNull]
         [Column(TypeName = "nvarchar(Max)")]
         public string ThumbNail { get; set; }
 
