@@ -11,9 +11,9 @@ namespace NewCenter.Models
     {
         // ref User
         [Required]
-        public string RefUserId { get; set; }
+        public int RefUserId { get; set; }
         // ref News
         [Required]
-        public string RefNewsId { get; set; }
+        public int RefNewsId { get; set; }
     }
 }

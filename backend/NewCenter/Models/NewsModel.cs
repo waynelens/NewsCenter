@@ -17,7 +17,7 @@ namespace NewCenter.Models
         [Column(TypeName = "nvarchar(Max)")]
         public string ThumbNail { get; set; }
 
-        [StringLength(50)]
+        [Column(TypeName = "nvarchar(Max)")]
         public string Title { get; set; }
 
         //ref Source table
