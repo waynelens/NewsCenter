@@ -8,6 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using NewCenter.DataAccess;
 using NewCenter.DataAccess.Repository;
 using NewCenter.Models;
+using NewCenter.Repository;
+using NewCenter.Services;
+using System.Xml;
 
 namespace NewCenter.Controllers
 {
@@ -15,97 +18,100 @@ namespace NewCenter.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        private readonly NewsRepository _repo;
+        private readonly IRepository<NewsModel> _newsrepo;
        
-        public NewsController(NewsRepository Repo)
+        public NewsController(IRepository<NewsModel> Repo)
         {
-            _repo = Repo;
+            _newsrepo = Repo;
         }
 
-        // GET: api/News
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<NewsModel>>> GetNews()
-        {
-            return await _context.News.ToListAsync();
-        }
+        //// POST: api/News
+        //// 透過RSS URL，取得所有新文章
+        //[HttpPost]
+        //public async Task<ActionResult<NewsModel>> PostNewsModel(RssRequestViewModels Rssreq)
+        //{
+        //    string rssUrl = Rssreq.RssUrl;
+        //    XmlNodeList latestArticles = 
+        //    _context.News.Add(newsModel);
+        //    await _context.SaveChangesAsync();
 
-        // GET: api/News/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<NewsModel>> GetNewsModel(int id)
-        {
-            var newsModel = await _context.News.FindAsync(id);
+        //    return CreatedAtAction("GetNewsModel", new { id = newsModel.Id }, newsModel);
+        //}
 
-            if (newsModel == null)
-            {
-                return NotFound();
-            }
+        //// GET: api/News
+        //[HttpGet]
+        //public async Task<ActionResult<IEnumerable<NewsModel>>> GetNews()
+        //{
+        //    return await _context.News.ToListAsync();
+        //}
 
-            return newsModel;
-        }
+        //// GET: api/News/5
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<NewsModel>> GetNewsModel(int id)
+        //{
+        //    var newsModel = await _context.News.FindAsync(id);
 
-        // PUT: api/News/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutNewsModel(int id, NewsModel newsModel)
-        {
-            if (id != newsModel.Id)
-            {
-                return BadRequest();
-            }
+        //    if (newsModel == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Entry(newsModel).State = EntityState.Modified;
+        //    return newsModel;
+        //}
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!NewsModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //// PUT: api/News/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to, for
+        //// more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutNewsModel(int id, NewsModel newsModel)
+        //{
+        //    if (id != newsModel.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            return NoContent();
-        }
+        //    _context.Entry(newsModel).State = EntityState.Modified;
 
-        // POST: api/News
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for
-        // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
-        [HttpPost]
-        public async Task<ActionResult<NewsModel>> PostNewsModel(NewsModel newsModel)
-        {
-            _context.News.Add(newsModel);
-            await _context.SaveChangesAsync();
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!NewsModelExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return CreatedAtAction("GetNewsModel", new { id = newsModel.Id }, newsModel);
-        }
+        //    return NoContent();
+        //}
 
-        // DELETE: api/News/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<NewsModel>> DeleteNewsModel(int id)
-        {
-            var newsModel = await _context.News.FindAsync(id);
-            if (newsModel == null)
-            {
-                return NotFound();
-            }
+        
 
-            _context.News.Remove(newsModel);
-            await _context.SaveChangesAsync();
+        //// DELETE: api/News/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<NewsModel>> DeleteNewsModel(int id)
+        //{
+        //    var newsModel = await _context.News.FindAsync(id);
+        //    if (newsModel == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return newsModel;
-        }
+        //    _context.News.Remove(newsModel);
+        //    await _context.SaveChangesAsync();
 
-        private bool NewsModelExists(int id)
-        {
-            return _context.News.Any(e => e.Id == id);
-        }
+        //    return newsModel;
+        //}
+
+        //private bool NewsModelExists(int id)
+        //{
+        //    return _context.News.Any(e => e.Id == id);
+        //}
     }
 }

@@ -9,14 +9,15 @@ using System.Xml;
 namespace NewCenter.Services
 {
     // parse rss2.0
-    public class ParseRssService
+    public class NewsService:INewsService
     {
-        public ParseRssService()
+        public NewsService()
         {
            
         }
 
-        public XmlNodeList getRssContent(string rssUrl) 
+        // 回傳複數文章資訊
+        public XmlNodeList parseRss(string rssUrl) 
         {
             WebRequest req = WebRequest.Create(rssUrl);
             WebResponse res = req.GetResponse();
