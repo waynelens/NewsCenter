@@ -17,6 +17,7 @@ using NewCenter.Repository;
 using NewCenter.Services;
 using Hangfire;
 using Hangfire.SqlServer;
+using NewCenter.DataAccess.Repository;
 
 namespace NewCenter
 {
@@ -70,6 +71,8 @@ namespace NewCenter
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard();
             });
+
+            BackgroundJob.Enqueue(() => Console.WriteLine("must appear"));
         }
     }
 }

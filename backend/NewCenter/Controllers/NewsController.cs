@@ -11,6 +11,7 @@ using NewCenter.Models;
 using NewCenter.Repository;
 using NewCenter.Services;
 using System.Xml;
+using SQLitePCL;
 
 namespace NewCenter.Controllers
 {
@@ -18,11 +19,15 @@ namespace NewCenter.Controllers
     [ApiController]
     public class NewsController : ControllerBase
     {
-        private readonly IRepository<NewsModel> _newsrepo;
-       
-        public NewsController(IRepository<NewsModel> Repo)
+        private readonly DAOContext _context;
+        private readonly NewsRepository _newsrepo;
+        private readonly RssService _service;
+
+        public NewsController(DAOContext Context)
         {
-            _newsrepo = Repo;
+            _context = Context;
+            _newsrepo = new NewsRepository(_context);
+            _service = new RssService(_context);
         }
 
         //// POST: api/News
@@ -38,12 +43,12 @@ namespace NewCenter.Controllers
         //    return CreatedAtAction("GetNewsModel", new { id = newsModel.Id }, newsModel);
         //}
 
-        //// GET: api/News
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<NewsModel>>> GetNews()
-        //{
-        //    return await _context.News.ToListAsync();
-        //}
+        // GET: api/News
+        [HttpGet]
+        public void GetNews()
+        {
+            _service.updateDailyNews();
+        }
 
         //// GET: api/News/5
         //[HttpGet("{id}")]
@@ -91,7 +96,7 @@ namespace NewCenter.Controllers
         //    return NoContent();
         //}
 
-        
+
 
         //// DELETE: api/News/5
         //[HttpDelete("{id}")]

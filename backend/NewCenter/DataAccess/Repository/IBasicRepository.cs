@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewCenter.Repository
 {
-    public interface IRepository<TModel> where TModel : class
+    public interface IBasicRepository<TModel> where TModel : class
     {
         // CRUD
         void Create(TModel entity);

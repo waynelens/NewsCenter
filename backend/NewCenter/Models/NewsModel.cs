@@ -20,6 +20,8 @@ namespace NewCenter.Models
         [Column(TypeName = "nvarchar(Max)")]
         public string Title { get; set; }
 
+        public string pubDate { get; set; }
+
         //ref Source table
         [Required]
         public int RefSourceId { get; set; }

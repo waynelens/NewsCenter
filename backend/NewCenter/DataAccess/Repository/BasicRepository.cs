@@ -12,7 +12,7 @@ using AutoMapper;
 
 namespace NewCenter.Repository
 {
-    public class BasicRepository<TModel> : IRepository<TModel> where TModel : BaseModel
+    public class BasicRepository<TModel> : IBasicRepository<TModel> where TModel : BaseModel
     {
         protected DAOContext Context;
 
