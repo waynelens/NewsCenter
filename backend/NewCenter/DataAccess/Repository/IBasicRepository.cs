@@ -13,12 +13,16 @@ namespace NewCenter.Repository
 
         void Create(IEnumerable<TModel> entities);
 
-        Task<TModel> Read(Expression<Func<TModel, bool>> predicate);
+        TModel Read(Expression<Func<TModel, bool>> predicate);
 
         IQueryable<TModel> ReadAll();
 
         void Update(TModel oldEntity,TModel newEntity);
 
         void Delete(TModel entity);
+
+        bool Repeat(Expression<Func<TModel, bool>> predicate);
+
+        void Dispose();
     }
 }

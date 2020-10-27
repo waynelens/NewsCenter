@@ -13,7 +13,7 @@ using System.Xml;
 namespace NewCenter.Services
 {
     // parse rss2.0
-    public class RssService
+    public class RssService : IRssService
     {
         private readonly DAOContext _context;
         private readonly SourceRepository _sourceRepo;
@@ -29,16 +29,21 @@ namespace NewCenter.Services
         public void updateDailyNews()
         {
             IEnumerable<SourceModel> allSources = _sourceRepo.ReadAll().AsEnumerable<SourceModel>();
-            List<NewsModel> News = new List<NewsModel>();
+            IEnumerable<NewsModel> allNews = _newsRepo.ReadAll().AsEnumerable<NewsModel>();
+            List<NewsModel> willAddNews = new List<NewsModel>();
             foreach (SourceModel source in allSources)
             {
                 XmlNodeList oneSourceArticles = parseRss(source.RssFeed);
                 foreach (XmlNode article in oneSourceArticles)
                 {
-                    News.Add(parseNode(article));
+                    NewsModel parseArticle = parseNode(article,source.Id);
+                    if(allNews.Where(x => x.Url == parseArticle.Url).Count() == 0)
+                    {
+                        willAddNews.Add(parseArticle);
+                    }
                 }
             }
-            _newsRepo.Create(News);
+            _newsRepo.Create(willAddNews);
         }
 
         // 回傳複數文章節點
@@ -54,8 +59,20 @@ namespace NewCenter.Services
         }
 
         // 解析單一節點
-        private NewsModel parseNode(XmlNode Node)
+        private NewsModel parseNode(XmlNode Node,int sourceid)
         {
+            TimeService timeParser = new TimeService();
+            DateTime pubDate;
+            try
+            {
+                pubDate = timeParser.parseTimetoUTC(Node.SelectSingleNode("pubDate").InnerText);
+            }
+            catch(Exception e)
+            {
+                // 如果parse不成，之後要寫log
+                // 因為要增加parse的規則
+                pubDate = DateTime.Now;
+            }
             return new NewsModel()
             {
                 CreatTime = DateTime.Now,
@@ -64,8 +81,8 @@ namespace NewCenter.Services
                 Url = Node.SelectSingleNode("link").InnerText,
                 ThumbNail = "nothing",
                 Title = Node.SelectSingleNode("title").InnerText,
-                pubDate = Node.SelectSingleNode("pubDate").InnerText,
-                RefSourceId = 1
+                pubDate = pubDate,
+                RefSourceId = sourceid
             };
         }
     }

@@ -16,7 +16,7 @@ namespace NewCenter.Repository
     {
         protected DAOContext Context;
 
-        private DbSet<TModel> Set => Context.Set<TModel>();
+        protected DbSet<TModel> Set => Context.Set<TModel>();
 
         public BasicRepository(DbContext context)
         {
@@ -29,19 +29,19 @@ namespace NewCenter.Repository
 
         public void Create(TModel entity)
         {
-            Set.AddAsync(entity);
-            Context.SaveChangesAsync();
+            Set.Add(entity);
+            Context.SaveChanges();
         }
 
         public void Create(IEnumerable<TModel> entities)
         {
-            Set.AddRangeAsync(entities);
-            Context.SaveChangesAsync();
+            Set.AddRange(entities);
+            Context.SaveChanges();
         }
 
-        public Task<TModel> Read(Expression<Func<TModel, bool>> predicate)
+        public TModel Read(Expression<Func<TModel, bool>> predicate)
         {
-            return Set.FirstOrDefaultAsync(predicate);
+            return Set.FirstOrDefault(predicate);
         }
 
         public IQueryable<TModel> ReadAll()
@@ -61,7 +61,19 @@ namespace NewCenter.Repository
             Context.Entry(entity).State = EntityState.Modified;
             entity.IsDelete = true;
             entity.EditTime = DateTime.Now;
-            Context.SaveChangesAsync();
+            Context.SaveChanges();
         }
+
+        public bool Repeat(Expression<Func<TModel, bool>> predicate)
+        {
+            int count = Set.Where(predicate).Count();
+            return count > 0 ? true : false;
+        }
+
+        public void Dispose()
+        {
+            Context.Dispose();
+        }
+
     }
 }

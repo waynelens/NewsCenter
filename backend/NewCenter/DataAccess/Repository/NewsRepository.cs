@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using Hangfire.Annotations;
+using System.Runtime.InteropServices;
 
 namespace NewCenter.DataAccess.Repository
 {
@@ -14,5 +16,6 @@ namespace NewCenter.DataAccess.Repository
         public NewsRepository(DbContext context) : base(context)
         {
         }
+
     }
 }

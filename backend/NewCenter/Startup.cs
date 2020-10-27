@@ -33,7 +33,7 @@ namespace NewCenter
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DAOContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ncdb")));
+            services.AddDbContextPool<DAOContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ncdb")));
             services.AddControllers();
             // Hangfire
             services.AddHangfireServer();
@@ -50,6 +50,9 @@ namespace NewCenter
                     DisableGlobalLocks = true
                 }
             ));
+            //DI
+            services.AddScoped<IRssService, RssService>();
+            services.AddScoped<ITimeService, TimeService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +75,7 @@ namespace NewCenter
                 endpoints.MapHangfireDashboard();
             });
 
-            BackgroundJob.Enqueue(() => Console.WriteLine("must appear"));
+            RecurringJob.AddOrUpdate("UpdateDailyNewsTask",(IRssService service) => service.updateDailyNews(), Cron.Daily);
         }
     }
 }

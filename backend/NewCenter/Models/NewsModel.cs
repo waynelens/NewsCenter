@@ -20,7 +20,8 @@ namespace NewCenter.Models
         [Column(TypeName = "nvarchar(Max)")]
         public string Title { get; set; }
 
-        public string pubDate { get; set; }
+        [Column(TypeName = "datetime2(7)")]
+        public DateTime? pubDate { get; set; }
 
         //ref Source table
         [Required]

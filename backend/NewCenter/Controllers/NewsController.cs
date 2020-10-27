@@ -10,8 +10,6 @@ using NewCenter.DataAccess.Repository;
 using NewCenter.Models;
 using NewCenter.Repository;
 using NewCenter.Services;
-using System.Xml;
-using SQLitePCL;
 
 namespace NewCenter.Controllers
 {
@@ -30,8 +28,14 @@ namespace NewCenter.Controllers
             _service = new RssService(_context);
         }
 
+        // GET: api/News
+        [HttpGet]
+        public void GetNews()
+        {
+
+        }
+
         //// POST: api/News
-        //// 透過RSS URL，取得所有新文章
         //[HttpPost]
         //public async Task<ActionResult<NewsModel>> PostNewsModel(RssRequestViewModels Rssreq)
         //{
@@ -43,12 +47,7 @@ namespace NewCenter.Controllers
         //    return CreatedAtAction("GetNewsModel", new { id = newsModel.Id }, newsModel);
         //}
 
-        // GET: api/News
-        [HttpGet]
-        public void GetNews()
-        {
-            _service.updateDailyNews();
-        }
+
 
         //// GET: api/News/5
         //[HttpGet("{id}")]
