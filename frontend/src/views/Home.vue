@@ -56,32 +56,46 @@
       </div>
 
       <div id="articles">
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
-        <CoreArticle></CoreArticle>
+        <CoreArticle v-for="item in articles" :key="item.Id" :title="item.Title" :url="item.Url" :thumbnail="item.Thumbnail">
+        </CoreArticle>
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue} from "vue-property-decorator";
+import VueAxios from "vue-axios";
+import { Component, Vue } from "vue-property-decorator";
+import { axios } from "vue/types/umd";
+import { CoreArticelViewModel } from "../viewmodel/CoreArticleViewModel";
+import { INewsModel} from "../model/INewsModel";
 
 @Component
 export default class Home extends Vue {
+  // data
+  articles: Array<CoreArticelViewModel> = [];
+
   // compute
-  get themeStatus():boolean{
+  get themeStatus(): boolean {
     return this.$store.state.themeStatus;
   }
-  get bg1Color():string{
+  get bg1Color(): string {
     const prefix = "background-color:";
-    return this.themeStatus ? prefix + this.$vuetify.theme.themes.light.bg1 : prefix + this.$vuetify.theme.themes.dark.bg1;
+    return this.themeStatus
+      ? prefix + this.$vuetify.theme.themes.light.bg1
+      : prefix + this.$vuetify.theme.themes.dark.bg1;
+  }
+
+  // method
+  created(): void {
+    Vue.axios
+      .get("https://newcenterwebapi.azurewebsites.net/api/news/LatestNews")
+      .then(res => {
+        res.data.forEach((data: INewsModel) => {
+          const article = new CoreArticelViewModel(data);
+          this.articles.push(article);
+        });
+      });
   }
 }
 </script>
@@ -129,7 +143,7 @@ export default class Home extends Vue {
   width: 10%;
 }
 
-#articles{
+#articles {
   padding: 0 15px;
   display: flex;
   flex-wrap: wrap;

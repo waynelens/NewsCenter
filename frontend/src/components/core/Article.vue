@@ -1,19 +1,18 @@
 <template>
-  <div class="article">
+  <div class="article" @click="Direct">
     <v-card max-width="300" rounded="xl" color="bg3">
       <v-card-title d-flex class="justify-space-between">
         <v-icon large left>
-          mdi-twitter
+          mdi-apple
         </v-icon>
-        <span class="title">Twitter</span>
         <v-icon>
           mdi-bookmark-outline
         </v-icon>
       </v-card-title>
 
       <v-card-text class="title">
-        "Turns out semicolon-less style is easier and safer in TS because most
-        gotcha edge cases are type invalid as well."
+        {{ title }}
+        <img src="https://i.imgur.com/AmSAypX.jpg" :alt=thumbnail />
       </v-card-text>
 
       <v-card-actions>
@@ -32,15 +31,37 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 @Component
-export default class PublicArticle extends Vue {}
+export default class PublicArticle extends Vue {
+  @Prop(String) readonly title: string | undefined;
+  @Prop(String) readonly url: string | undefined;
+  @Prop(String) readonly thumbnail: string | undefined;
+
+  // method
+  Direct(): void {
+    if (this.url) {
+      window.open(this.url);
+    }
+  }
+}
 </script>
 
 <style>
-.article{
+.article {
   margin: 15px;
+}
+
+.title{
+  display: flex;
+  flex-direction: column;
+}
+
+.title img{
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
 }
 </style>
 
