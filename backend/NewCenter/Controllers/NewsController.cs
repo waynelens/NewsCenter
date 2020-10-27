@@ -28,7 +28,7 @@ namespace NewCenter.Controllers
             _service = new RssService(_context);
         }
 
-        // GET: api/News/GetLatestNews
+        // GET: api/News/LatestNews
         [HttpGet]
         public IActionResult LatestNews()
         {

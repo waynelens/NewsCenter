@@ -10,14 +10,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NewCenter.DataAccess;
-using NewCenter.Models;
-using NewCenter.Repository;
 using NewCenter.Services;
 using Hangfire;
 using Hangfire.SqlServer;
-using NewCenter.DataAccess.Repository;
+using Hangfire.Dashboard;
 
 namespace NewCenter
 {
@@ -56,7 +53,7 @@ namespace NewCenter
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IBackgroundJobClient backgroundJobs)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -73,9 +70,10 @@ namespace NewCenter
             {
                 endpoints.MapControllers();
                 endpoints.MapHangfireDashboard();
+
             });
 
-            RecurringJob.AddOrUpdate("UpdateDailyNewsTask",(IRssService service) => service.updateDailyNews(), Cron.Daily);
+            RecurringJob.AddOrUpdate("UpdateDailyNewsTask", (IRssService service) => service.updateDailyNews(), Cron.Daily);
         }
     }
 }
