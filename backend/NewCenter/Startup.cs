@@ -14,7 +14,6 @@ using NewCenter.DataAccess;
 using NewCenter.Services;
 using Hangfire;
 using Hangfire.SqlServer;
-using Hangfire.Dashboard;
 
 namespace NewCenter
 {
@@ -32,6 +31,16 @@ namespace NewCenter
         {
             services.AddDbContextPool<DAOContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ncdb")));
             services.AddControllers();
+            services.AddCors(options =>
+            {
+                options.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod()
+                          .AllowCredentials();
+                });
+            });
             // Hangfire
             services.AddHangfireServer();
             services.AddHangfire(configuration => configuration
@@ -65,6 +74,8 @@ namespace NewCenter
             app.UseRouting();
 
             app.UseAuthorization();
+
+            app.UseCors("CorsPolicy");
 
             app.UseEndpoints(endpoints =>
             {
