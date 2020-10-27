@@ -13,7 +13,7 @@ using NewCenter.Services;
 
 namespace NewCenter.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class NewsController : ControllerBase
     {
@@ -28,11 +28,16 @@ namespace NewCenter.Controllers
             _service = new RssService(_context);
         }
 
-        // GET: api/News
+        // GET: api/News/GetLatestNews
         [HttpGet]
-        public void GetNews()
+        public IActionResult LatestNews()
         {
+            DateTime today = DateTime.Today.AddDays(-1);
+            DateTime tomorrow = DateTime.Today;
+            var allNews = _newsrepo.ReadAll().AsEnumerable<NewsModel>();
+            var latestNews = allNews.Where(x => DateTime.Compare(today, (DateTime)x.pubDate) < 0 && DateTime.Compare(tomorrow, (DateTime)x.pubDate) > 0);
 
+            return Ok(latestNews);
         }
 
         //// POST: api/News
