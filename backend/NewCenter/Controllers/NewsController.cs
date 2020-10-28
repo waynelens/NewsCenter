@@ -11,6 +11,7 @@ using NewCenter.DataAccess.Repository;
 using NewCenter.Models;
 using NewCenter.Repository;
 using NewCenter.Services;
+using NewCenter.ViewModels;
 
 namespace NewCenter.Controllers
 {
@@ -20,13 +21,18 @@ namespace NewCenter.Controllers
     {
         private readonly DAOContext _context;
         private readonly NewsRepository _newsrepo;
-        private readonly RssService _service;
+        private readonly SourceRepository _sourcerepo;
+        private readonly UpvoteRepository _upvoterepo;
+        private readonly CommentRepository _commentrepo;
+
 
         public NewsController(DAOContext Context)
         {
             _context = Context;
             _newsrepo = new NewsRepository(_context);
-            _service = new RssService(_context);
+            _sourcerepo = new SourceRepository(_context);
+            _upvoterepo = new UpvoteRepository(_context);
+            _commentrepo = new CommentRepository(_context);
         }
 
         // GET: api/News/LatestNews
@@ -35,10 +41,27 @@ namespace NewCenter.Controllers
         {
             DateTime today = DateTime.Today.AddDays(-1);
             DateTime tomorrow = DateTime.Today;
+            List<NewsViewModel> res = new List<NewsViewModel>();
+
             var allNews = _newsrepo.ReadAll().AsEnumerable<NewsModel>();
             var latestNews = allNews.Where(x => DateTime.Compare(today, (DateTime)x.pubDate) < 0 && DateTime.Compare(tomorrow, (DateTime)x.pubDate) > 0);
+            foreach(var news in latestNews)
+            {
+                NewsViewModel resPart = new NewsViewModel()
+                {
+                    Id = news.Id,
+                    Title = news.Title,
+                    Thumbnail = news.ThumbNail,
+                    Url = news.Url,
+                    pubDate = news.pubDate,
+                    Logo = _sourcerepo.Read(x => x.Id == news.RefSourceId).Logo,
+                    UpvoteCount = _upvoterepo.ReadAll().Where(x => x.RefNewsId == news.Id).Count(),
+                    CommentCount = _commentrepo.ReadAll().Where(x => x.RefNewsId == news.Id).Count(),
+                };
+                res.Add(resPart);
+            }
 
-            return Ok(latestNews);
+            return Ok(res);
         }
 
         //// POST: api/News
