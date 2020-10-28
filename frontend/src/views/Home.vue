@@ -56,7 +56,7 @@
       </div>
 
       <div id="articles">
-        <CoreArticle v-for="item in articles" :key="item.Id" :title="item.Title" :url="item.Url" :thumbnail="item.Thumbnail">
+        <CoreArticle v-for="item in articles" :key="item.Id" :news="item" :title="item.Title" :url="item.Url" :thumbnail="item.Thumbnail">
         </CoreArticle>
       </div>
     </div>
@@ -67,13 +67,12 @@
 import VueAxios from "vue-axios";
 import { Component, Vue } from "vue-property-decorator";
 import { axios } from "vue/types/umd";
-import { CoreArticelViewModel } from "../viewmodel/CoreArticleViewModel";
-import { INewsModel} from "../model/INewsModel";
+import { INewsModel} from "../viewmodel/INewsModel";
 
 @Component
 export default class Home extends Vue {
   // data
-  articles: Array<CoreArticelViewModel> = [];
+  articles: Array<INewsModel> = [];
 
   // compute
   get themeStatus(): boolean {
@@ -92,8 +91,7 @@ export default class Home extends Vue {
       .get("https://newcenterwebapi.azurewebsites.net/api/news/LatestNews")
       .then(res => {
         res.data.forEach((data: INewsModel) => {
-          const article = new CoreArticelViewModel(data);
-          this.articles.push(article);
+          this.articles.push(data);
         });
       });
   }
