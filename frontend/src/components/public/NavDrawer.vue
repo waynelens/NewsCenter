@@ -34,6 +34,7 @@
             <v-btn @click="postRssFeedUrl">
               Ok
             </v-btn>
+            <v-card-text>{{ sourceDialogHint }}</v-card-text>
           </v-card-actions>
         </v-card>
       </v-dialog>
@@ -60,6 +61,7 @@ export default class PublicNavDrawer extends Vue {
   // data
   linkTagSwitch = false;
   addSourceDialog = false;
+  sourceDialogHint = "";
   rssFeedUrl = "";
 
   // computed
@@ -70,9 +72,29 @@ export default class PublicNavDrawer extends Vue {
   // method
   postRssFeedUrl(): void {
     const req: ISourceProviderModel = {
-      rssFeed : this.rssFeedUrl,
-      refCreatorId : 3
+      rssFeed: this.rssFeedUrl,
+      refCreatorId: 3
     };
+    Vue.axios
+      .post(
+        "https://newcenterwebapi.azurewebsites.net/api/Source/PostSource",
+        req
+      )
+      .then(
+        res => {
+          this.sourceDialogHint = "Thank you, the rss will be reviewed :)";
+        },
+        err => {
+          this.sourceDialogHint = "The rss is invalid :(";
+        }
+      )
+      .then(() => {
+        setTimeout(() => {
+          this.rssFeedUrl = "";
+          this.addSourceDialog = false;
+          this.sourceDialogHint = "";
+        }, 1500);
+      });
   }
 
   //watch
