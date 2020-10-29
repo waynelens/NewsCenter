@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace NewCenter.ViewModels
 {
-    public class NewsViewModel
+    public class NewsResponse
     {
         public int Id { get; set; }
         public string Title { get; set; }

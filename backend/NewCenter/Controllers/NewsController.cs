@@ -41,13 +41,13 @@ namespace NewCenter.Controllers
         {
             DateTime today = DateTime.Today.AddDays(-1);
             DateTime tomorrow = DateTime.Today;
-            List<NewsViewModel> res = new List<NewsViewModel>();
+            List<NewsResponse> res = new List<NewsResponse>();
 
-            var allNews = _newsrepo.ReadAll().AsEnumerable<NewsModel>();
+            var allNews = _newsrepo.ReadAll().Where(x => x.IsDelete == false).AsEnumerable<NewsModel>();
             var latestNews = allNews.Where(x => DateTime.Compare(today, (DateTime)x.pubDate) < 0 && DateTime.Compare(tomorrow, (DateTime)x.pubDate) > 0);
             foreach(var news in latestNews)
             {
-                NewsViewModel resPart = new NewsViewModel()
+                NewsResponse resPart = new NewsResponse()
                 {
                     Id = news.Id,
                     Title = news.Title,
