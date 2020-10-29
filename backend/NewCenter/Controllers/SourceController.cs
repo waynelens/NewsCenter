@@ -9,6 +9,7 @@ using NewCenter.DataAccess;
 using NewCenter.DataAccess.Repository;
 using NewCenter.DataTransfer.Request;
 using NewCenter.Models;
+using NewCenter.Services;
 using NewCenter.ViewModels;
 
 namespace NewCenter.Controllers
@@ -19,22 +20,24 @@ namespace NewCenter.Controllers
     {
         private readonly DAOContext _context;
         private readonly SourceRepository _sourcerepo;
+        private readonly RssService _rssService;
         public SourceController(DAOContext context)
         {
             _context = context;
             _sourcerepo = new SourceRepository(context);
+            _rssService = new RssService(context);
         }
 
         // GET: api/Source/GetSources
         [HttpGet]
         public IActionResult GetSources()
         {
-            List<SourceResponse> res = new List<SourceResponse>();
+            List<SourceResponse.Get> res = new List<SourceResponse.Get>();
             var allSources = _sourcerepo.ReadAll().Where(x => x.IsDelete == false).AsEnumerable<SourceModel>();
             
             foreach(SourceModel source in allSources)
             {
-                SourceResponse resPart = new SourceResponse()
+                SourceResponse.Get resPart = new SourceResponse.Get()
                 {
                     Id = source.Id,
                     Logo = source.Logo,
@@ -51,9 +54,31 @@ namespace NewCenter.Controllers
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public IActionResult PostSource(SourceRequest req)
+        public IActionResult PostSource(SourceRequest.Post req)
         {
-            return Ok();
+            if (_rssService.urlIsRss(req.RssFeed))
+            {
+                SourceModel willAddSource = new SourceModel()
+                {
+                    CreatTime = DateTime.Now,
+                    IsDelete = true,
+                    RefCreatorId = req.RefCreatorId,
+                    Name = "Reviewing",
+                    Logo = "Reviewing",
+                    RssFeed = req.RssFeed
+                };
+
+                if(!_sourcerepo.Repeat(x => x.RssFeed == willAddSource.RssFeed))
+                {
+                    // 沒有重複才加入
+                    _sourcerepo.Create(willAddSource);
+                }
+                return Ok();
+            }
+            else
+            {
+                return BadRequest();
+            }
         }
 
         // GET: api/Source/5

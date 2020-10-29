@@ -1,4 +1,5 @@
-﻿using NewCenter.DataAccess;
+﻿using CodeHollow.FeedReader;
+using NewCenter.DataAccess;
 using NewCenter.DataAccess.Repository;
 using NewCenter.Models;
 using NewCenter.Repository;
@@ -44,6 +45,18 @@ namespace NewCenter.Services
                 }
             }
             _newsRepo.Create(willAddNews);
+        }
+        public bool urlIsRss(string rssUrl)
+        {
+            try
+            {
+                var feed = FeedReader.Read(rssUrl);
+                return Enum.IsDefined(typeof(FeedType), feed.Type);
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
         // 回傳複數文章節點

@@ -7,9 +7,12 @@ namespace NewCenter.ViewModels
 {
     public class SourceResponse
     {
-        public int Id { get; set; }
-        public string Logo { get; set; }
-        public string Name { get; set; }
-        public string RssFeed { get; set; }
+        public class Get
+        {
+            public int Id { get; set; }
+            public string Logo { get; set; }
+            public string Name { get; set; }
+            public string RssFeed { get; set; }
+        }
     }
 }

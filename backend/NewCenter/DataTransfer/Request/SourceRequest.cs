@@ -7,7 +7,10 @@ namespace NewCenter.DataTransfer.Request
 {
     public class SourceRequest
     {
-        public string RssFeed { get; set; }
-        public int RefCreatorId { get; set; }
+        public class Post
+        {
+            public string RssFeed { get; set; }
+            public int RefCreatorId { get; set; }
+        }
     }
 }
