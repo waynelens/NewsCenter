@@ -16,4 +16,4 @@ interface INewsModel {
     commentCount: number;
 }
 
-export { INewsModel }
+export { INewsModel };

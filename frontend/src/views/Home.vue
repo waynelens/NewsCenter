@@ -56,7 +56,7 @@
       </div>
 
       <div id="articles">
-        <CoreArticle v-for="item in articles" :key="item.Id" :news="item" :title="item.Title" :url="item.Url" :thumbnail="item.Thumbnail">
+        <CoreArticle v-for="item in articles" :key="item.Id" :news="item">
         </CoreArticle>
       </div>
     </div>

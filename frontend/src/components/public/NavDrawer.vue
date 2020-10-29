@@ -24,14 +24,14 @@
               your feed.
             </p>
             <v-text-field
-              value=""
+              v-model="rssFeedUrl"
               filled
               autofocus
               placeholder="Past Blog Rss URL"
             ></v-text-field>
           </v-card-text>
           <v-card-actions>
-            <v-btn @click="addSourceDialog = false">
+            <v-btn @click="postRssFeedUrl">
               Ok
             </v-btn>
           </v-card-actions>
@@ -53,16 +53,26 @@
 
 <script lang="ts">
 import { Vue, Component, Watch } from "vue-property-decorator";
+import { ISourceProviderModel } from "../../model/ISourceProviderModel";
 
 @Component
 export default class PublicNavDrawer extends Vue {
   // data
   linkTagSwitch = false;
   addSourceDialog = false;
+  rssFeedUrl = "";
 
   // computed
   get linkTagListStatus(): string {
     return this.$store.state.linkTagListStatus;
+  }
+
+  // method
+  postRssFeedUrl(): void {
+    const req: ISourceProviderModel = {
+      rssFeed : this.rssFeedUrl,
+      refCreatorId : 3
+    };
   }
 
   //watch
@@ -86,7 +96,7 @@ export default class PublicNavDrawer extends Vue {
   margin-left: 13%;
 }
 
-#test{
+#test {
   position: fixed;
   bottom: 0;
   width: 100%;
