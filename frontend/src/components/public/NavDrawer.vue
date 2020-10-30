@@ -40,13 +40,14 @@
       </v-dialog>
     </div>
 
-    <CoreLinkList></CoreLinkList>
+    <CoreLinkList :searchReq="sourceSearchValue"></CoreLinkList>
 
-    <div id="test">
+    <div id="sourceSearchBar">
       <v-text-field
         placeholder="Search Source"
         prepend-inner-icon="mdi-magnify"
         filled
+        v-model="sourceSearchValue"
       ></v-text-field>
     </div>
   </div>
@@ -63,12 +64,12 @@ export default class PublicNavDrawer extends Vue {
   addSourceDialog = false;
   sourceDialogHint = "";
   rssFeedUrl = "";
+  sourceSearchValue = "";
 
   // computed
   get linkTagListStatus(): string {
     return this.$store.state.linkTagListStatus;
   }
-
   // method
   postRssFeedUrl(): void {
     const req: ISourceProviderModel = {
@@ -118,7 +119,7 @@ export default class PublicNavDrawer extends Vue {
   margin-left: 13%;
 }
 
-#test {
+#sourceSearchBar {
   position: fixed;
   bottom: 0;
   width: 100%;

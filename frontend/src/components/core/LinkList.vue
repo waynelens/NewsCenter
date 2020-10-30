@@ -3,9 +3,9 @@
     <v-list flat>
       <v-subheader>MY PUBLIC SOURCES</v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="item in linkList" :key="item.id">
+        <v-list-item v-for="item in linkListDisplay" :key="item.id">
           <v-list-item-icon>
-            <img :src="item.logo" alt="" />
+            <img :src="item.logo" alt="" width="20" />
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>{{ item.name }}</v-list-item-title>
@@ -19,12 +19,16 @@
 
 <script lang="ts">
 import { ISourceModel } from "@/viewmodel/ISourceModel";
-import { Vue, Component } from "vue-property-decorator";
+import { Vue, Component, Prop, Watch } from "vue-property-decorator";
 
 @Component
 export default class PublicLinkList extends Vue {
   //data
   linkList: Array<ISourceModel> = [];
+  linkListDisplay: Array<ISourceModel> = [];
+
+  // prop
+  @Prop(String) readonly searchReq: string | undefined;
 
   // method
   created(): void {
@@ -33,8 +37,17 @@ export default class PublicLinkList extends Vue {
       .then(res => {
         res.data.forEach((data: ISourceModel) => {
           this.linkList.push(data);
+          this.linkListDisplay.push(data);
         });
       });
+  }
+
+  // watch
+  @Watch("searchReq")
+  listFilter(val: string, oldVal: string) {
+    this.linkListDisplay = this.linkList.filter(x =>
+      x.name.toLowerCase().includes(val.toLowerCase())
+    );
   }
 }
 //TODO: 未來加入vuetify的 tooltips，顯示RSS
