@@ -7,13 +7,16 @@ namespace NewCenter.ViewModels
 {
     public class NewsResponse
     {
-        public int Id { get; set; }
-        public string Title { get; set; }
-        public string Thumbnail { get; set; }
-        public string Url { get; set; }
-        public DateTime? pubDate { get; set; }
-        public string Logo { get; set; }
-        public int UpvoteCount { get; set; }
-        public int CommentCount { get; set; }
+        public class LatestNews
+        {
+            public int Id { get; set; }
+            public string Title { get; set; }
+            public string Thumbnail { get; set; }
+            public string Url { get; set; }
+            public DateTime? pubDate { get; set; }
+            public string Logo { get; set; }
+            public int UpvoteCount { get; set; }
+            public int CommentCount { get; set; }
+        }
     }
 }

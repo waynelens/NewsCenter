@@ -1,9 +1,9 @@
 {
   "dependencies": {
-    "mssql1": {
+    "mssql2": {
       "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/waynelenssqlserver/databases/ncdb",
       "type": "mssql.azure",
-      "connectionId": "NewsCenterdb",
+      "connectionId": "ncdb",
       "secretStore": "AzureAppSettings"
     }
   }

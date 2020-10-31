@@ -1,4 +1,7 @@
 ﻿using CodeHollow.FeedReader;
+using CodeHollow.FeedReader.Feeds;
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.CodeAnalysis.CSharp;
 using NewCenter.DataAccess;
 using NewCenter.DataAccess.Repository;
 using NewCenter.Models;
@@ -29,23 +32,85 @@ namespace NewCenter.Services
 
         public void updateDailyNews()
         {
-            IEnumerable<SourceModel> allSources = _sourceRepo.ReadAll().AsEnumerable<SourceModel>();
+            IEnumerable<SourceModel> allSources = _sourceRepo.ReadAll().Where(x => x.IsDelete == false && x.Name != "Reviewing").AsEnumerable<SourceModel>();
             IEnumerable<NewsModel> allNews = _newsRepo.ReadAll().AsEnumerable<NewsModel>();
             List<NewsModel> willAddNews = new List<NewsModel>();
             foreach (SourceModel source in allSources)
             {
-                XmlNodeList oneSourceArticles = parseRss(source.RssFeed);
-                foreach (XmlNode article in oneSourceArticles)
+                var feed = FeedReader.Read(source.RssFeed);
+                if (feed.Type == FeedType.Rss_2_0)
                 {
-                    NewsModel parseArticle = parseNode(article,source.Id);
-                    if(allNews.Where(x => x.Url == parseArticle.Url).Count() == 0)
+                    var rss20Feed = (Rss20Feed)feed.SpecificFeed;
+                    foreach (var Item in rss20Feed.Items)
                     {
-                        willAddNews.Add(parseArticle);
+                        var rss20Item = (Rss20FeedItem)Item;
+                        NewsModel oneNews = new NewsModel()
+                        {
+                            CreatTime = DateTime.Now,
+                            IsDelete = false,
+                            RefCreatorId = 3,
+                            Url = rss20Item.Link,
+                            ThumbNail = "nothing",
+                            Title = rss20Item.Title,
+                            pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : rss20Item.PublishingDate,
+                            RefSourceId = source.Id
+                        };
+                        if(allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
+                        {
+                            willAddNews.Add(oneNews);
+                        }
+                    }
+                }
+                else if (feed.Type == FeedType.Atom)
+                {
+                    var atomFeed = (AtomFeed)feed.SpecificFeed;
+                    foreach(var Item in atomFeed.Items)
+                    {
+                        var atomItem = (AtomFeedItem)Item;
+                        NewsModel oneNews = new NewsModel()
+                        {
+                            CreatTime = DateTime.Now,
+                            IsDelete = false,
+                            RefCreatorId = 3,
+                            Url = atomItem.Links.Last().ToString(),
+                            ThumbNail = "nothing",
+                            Title = atomItem.Title,
+                            pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : atomItem.PublishedDate,
+                            RefSourceId = source.Id
+                        };
+                        if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
+                        {
+                            willAddNews.Add(oneNews);
+                        }
+                    }
+                }
+                else if(feed.Type == FeedType.MediaRss)
+                {
+                    var mediaFeed = (MediaRssFeed)feed.SpecificFeed;
+                    foreach(var item in mediaFeed.Items)
+                    {
+                        var mediaItem = (MediaRssFeedItem)item;
+                        NewsModel oneNews = new NewsModel()
+                        {
+                            CreatTime = DateTime.Now,
+                            IsDelete = false,
+                            RefCreatorId = 3,
+                            Url = mediaItem.Link,
+                            ThumbNail = "nothing",
+                            Title = mediaItem.Title,
+                            pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : mediaItem.PublishingDate,
+                            RefEditorId = source.Id
+                        };
+                        if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
+                        {
+                            willAddNews.Add(oneNews);
+                        }
                     }
                 }
             }
             _newsRepo.Create(willAddNews);
         }
+
         public bool urlIsRss(string rssUrl)
         {
             try
@@ -59,44 +124,5 @@ namespace NewCenter.Services
             }
         }
 
-        // 回傳複數文章節點
-        private XmlNodeList parseRss(string rssUrl)
-        {
-            WebRequest req = WebRequest.Create(rssUrl);
-            WebResponse res = req.GetResponse();
-            Stream rssStream = res.GetResponseStream();
-            XmlDocument rssDoc = new XmlDocument();
-            rssDoc.Load(rssStream);
-
-            return rssDoc.SelectNodes("rss/channel/item");
-        }
-
-        // 解析單一節點
-        private NewsModel parseNode(XmlNode Node,int sourceid)
-        {
-            TimeService timeParser = new TimeService();
-            DateTime pubDate;
-            try
-            {
-                pubDate = timeParser.parseTimetoUTC(Node.SelectSingleNode("pubDate").InnerText);
-            }
-            catch(Exception e)
-            {
-                // 如果parse不成，之後要寫log
-                // 因為要增加parse的規則
-                pubDate = DateTime.Now;
-            }
-            return new NewsModel()
-            {
-                CreatTime = DateTime.Now,
-                IsDelete = false,
-                RefCreatorId = 3,
-                Url = Node.SelectSingleNode("link").InnerText,
-                ThumbNail = "nothing",
-                Title = Node.SelectSingleNode("title").InnerText,
-                pubDate = pubDate,
-                RefSourceId = sourceid
-            };
-        }
     }
 }
