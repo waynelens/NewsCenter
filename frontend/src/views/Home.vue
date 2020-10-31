@@ -65,9 +65,9 @@
 
 <script lang="ts">
 import VueAxios from "vue-axios";
-import { Component, Vue } from "vue-property-decorator";
+import { Component, Vue, Watch } from "vue-property-decorator";
 import { axios } from "vue/types/umd";
-import { INewsModel} from "../viewmodel/INewsModel";
+import { INewsModel } from "../viewmodel/INewsModel";
 
 @Component
 export default class Home extends Vue {
@@ -84,9 +84,16 @@ export default class Home extends Vue {
       ? prefix + this.$vuetify.theme.themes.light.bg1
       : prefix + this.$vuetify.theme.themes.dark.bg1;
   }
+  get sourceStatus(): number {
+    return this.$store.state.sourceStatus;
+  }
+  set sourceStatus(data: number) {
+    this.$store.commit("switchSourceStatus", data);
+  }
 
   // method
   created(): void {
+    this.sourceStatus = 0;
     Vue.axios
       .get("https://newcenterwebapi.azurewebsites.net/api/news/LatestNews")
       .then(res => {
@@ -94,6 +101,20 @@ export default class Home extends Vue {
           this.articles.push(data);
         });
       });
+  }
+
+  // watch
+  @Watch("sourceStatus")
+  displayPartLatestNews(val: number, oldVal: number) {
+    if (val != 0) {
+      Vue.axios
+        .get(
+          "https://newcenterwebapi.azurewebsites.net/api/news/LatestNews/" + val
+        )
+        .then(res => {
+          console.log(res);
+        });
+    }
   }
 }
 </script>

@@ -3,7 +3,11 @@
     <v-list flat>
       <v-subheader>MY PUBLIC SOURCES</v-subheader>
       <v-list-item-group>
-        <v-list-item v-for="item in linkListDisplay" :key="item.id">
+        <v-list-item
+          v-for="item in linkListDisplay"
+          :key="item.id"
+          @click="switchSourceStatus(item.id)"
+        >
           <v-list-item-icon>
             <img :src="item.logo" alt="" width="20" />
           </v-list-item-icon>
@@ -40,6 +44,10 @@ export default class PublicLinkList extends Vue {
           this.linkListDisplay.push(data);
         });
       });
+  }
+
+  switchSourceStatus(rssFeed: string): void {
+    this.$store.commit("switchSourceStatus", rssFeed);
   }
 
   // watch

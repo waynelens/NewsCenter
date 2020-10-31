@@ -9,12 +9,8 @@ export default new Vuex.Store({
     disturbStatus: "Turn Off",
     layoutPanelStatus: false,
     linkTagListStatus: "Link",
-    loginStatus:{
-      // 測試
-      status: true,
-      auth: "Github"
-    },
     themeStatus: true,
+    sourceStatus: 0,
   },
   mutations: {
     switchBookMarkStatus: (state, mode: boolean) => state.bookMarkStatus = mode,
@@ -22,6 +18,7 @@ export default new Vuex.Store({
     switchLayoutPanelStatus: (state) => state.layoutPanelStatus = !state.layoutPanelStatus,
     switchlinkTagListStatus: (state,mode:string) => state.linkTagListStatus = mode,
     switchThemeStatus: (state,mode:boolean) => state.themeStatus = mode,
+    switchSourceStatus: (state, sourceId:number) => state.sourceStatus = sourceId,
   },
   actions: {},
   modules: {},
