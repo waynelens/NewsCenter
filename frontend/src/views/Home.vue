@@ -25,8 +25,8 @@
             </template>
 
             <v-card>
-              <v-card-title class="headline grey lighten-2">
-                Privacy Policy
+              <v-card-title class="headline grey lighten-2"
+                >`` Privacy Policy
               </v-card-title>
 
               <v-card-text>
@@ -68,6 +68,7 @@ import VueAxios from "vue-axios";
 import { Component, Vue, Watch } from "vue-property-decorator";
 import { axios } from "vue/types/umd";
 import { INewsModel } from "../viewmodel/INewsModel";
+import { ILatestNewsModel } from "../model/ILatestNewsModel";
 
 @Component
 export default class Home extends Vue {
@@ -90,12 +91,44 @@ export default class Home extends Vue {
   set sourceStatus(data: number) {
     this.$store.commit("switchSourceStatus", data);
   }
+  get latestNewsBatch(): number {
+    return this.$store.state.latestNewsBatch;
+  }
+  set latestNewsBatch(data: number) {
+    this.$store.commit("addLatestNewsBatch", data);
+  }
 
   // method
+  scrollLoadNews(): void {
+    if (window.innerHeight + window.pageYOffset >= document.body.offsetHeight) {
+      console.log("出發");
+      this.latestNewsBatch = this.latestNewsBatch + 1;
+      const req: ILatestNewsModel = {
+        sourceId: this.sourceStatus,
+        batch: this.latestNewsBatch
+      };
+      Vue.axios
+        .post("https://localhost:44302/api/News/LatestNews", req)
+        .then(res => {
+          res.data.forEach((data: INewsModel) => {
+            this.articles.push(data);
+          });
+        });
+    }
+  }
+
+  // life cycle
   created(): void {
+    window.addEventListener("scroll", this.scrollLoadNews);
     this.sourceStatus = 0;
+    this.latestNewsBatch = 1;
+
+    const req: ILatestNewsModel = {
+      sourceId: this.sourceStatus,
+      batch: this.latestNewsBatch
+    };
     Vue.axios
-      .get("https://newcenterwebapi.azurewebsites.net/api/news/LatestNews")
+      .post("https://localhost:44302/api/News/LatestNews", req)
       .then(res => {
         res.data.forEach((data: INewsModel) => {
           this.articles.push(data);
@@ -106,13 +139,20 @@ export default class Home extends Vue {
   // watch
   @Watch("sourceStatus")
   displayPartLatestNews(val: number, oldVal: number) {
+    this.latestNewsBatch = 1;
+    this.articles.length = 0;
+    
     if (val != 0) {
+      const req: ILatestNewsModel = {
+        sourceId: val,
+        batch: this.latestNewsBatch
+      };
       Vue.axios
-        .get(
-          "https://newcenterwebapi.azurewebsites.net/api/news/LatestNews/" + val
-        )
+        .post("https://localhost:44302/api/News/LatestNews", req)
         .then(res => {
-          console.log(res);
+          res.data.forEach((data: INewsModel) => {
+            this.articles.push(data);
+          });
         });
     }
   }
@@ -163,7 +203,6 @@ export default class Home extends Vue {
 }
 
 #articles {
-  padding: 0 15px;
   display: flex;
   flex-wrap: wrap;
 }

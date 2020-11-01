@@ -1,8 +1,8 @@
 <template>
-  <div class="article" @click="Direct">
-    <v-card max-width="300" rounded="xl" color="bg3">
+  <div class="article-container" @click="Direct">
+    <v-card rounded="xl" color="bg3" class="article">
       <v-card-title d-flex class="justify-space-between">
-        <img :src="news.logo" alt="Logo">        
+        <img :src="news.logo" alt="Logo" class="article-logo" />
         <v-icon>
           mdi-bookmark-outline
         </v-icon>
@@ -18,12 +18,12 @@
         <v-icon class="mr-1">
           mdi-thumb-up-outline
         </v-icon>
-        <span class="subheading mr-2">{{news.upvoteCount}}</span>
+        <span class="subheading mr-2">{{ news.upvoteCount }}</span>
         <span class="mr-1">·</span>
         <v-icon class="mr-1">
           mdi-comment-processing-outline
         </v-icon>
-        <span class="subheading">{{news.commentCount}}</span>
+        <span class="subheading">{{ news.commentCount }}</span>
       </v-card-actions>
     </v-card>
   </div>
@@ -50,8 +50,14 @@ export default class PublicArticle extends Vue {
 </script>
 
 <style>
-.article {
+.article-container {
   margin: 15px;
+  width: calc((100%-30px) / 6);
+}
+
+.article {
+  width: 100%;
+  padding: 5px;
 }
 
 .title {
@@ -64,6 +70,26 @@ export default class PublicArticle extends Vue {
   object-fit: cover;
   width: 100%;
   height: 100%;
+}
+
+.title p:first-child {
+  font-size: 18px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  color: #000;
+  font-weight: 400;
+}
+
+.title p:nth-child(2){
+  font-size: 16px;
+  font-weight: 900;
+}
+
+.article-logo {
+  width: 30px;
 }
 </style>
 

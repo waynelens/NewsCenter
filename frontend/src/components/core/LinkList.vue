@@ -37,7 +37,7 @@ export default class PublicLinkList extends Vue {
   // method
   created(): void {
     Vue.axios
-      .get("https://newcenterwebapi.azurewebsites.net/api/Source/GetSources")
+      .get("https://localhost:44302/api/Source/GetSources")
       .then(res => {
         res.data.forEach((data: ISourceModel) => {
           this.linkList.push(data);
@@ -46,8 +46,8 @@ export default class PublicLinkList extends Vue {
       });
   }
 
-  switchSourceStatus(rssFeed: string): void {
-    this.$store.commit("switchSourceStatus", rssFeed);
+  switchSourceStatus(sourceId: number): void {
+    this.$store.commit("switchSourceStatus", sourceId);
   }
 
   // watch
