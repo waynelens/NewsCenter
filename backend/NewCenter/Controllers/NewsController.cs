@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NewCenter.DataAccess;
 using NewCenter.DataAccess.Repository;
+using NewCenter.DataTransfer.Request;
 using NewCenter.Models;
 using NewCenter.ViewModels;
 
@@ -33,16 +34,26 @@ namespace NewCenter.Controllers
             _commentrepo = new CommentRepository(_context);
         }
 
-        // GET: api/News/LatestNews/1
+        // Post: api/News/LatestNews
         // 提取前30篇文章，瀑布流
+        // 根據是否有給sourceId，決定是否給特定source文章
         // batch 代表第幾批文章
-        [HttpGet("{batch}")]
-        public IActionResult LatestNews(int batch)
+        [HttpPost]
+        public IActionResult LatestNews(NewsRequest.LatestNews req)
         {
             List<NewsResponse.LatestNews> res = new List<NewsResponse.LatestNews>();
+            IQueryable<NewsModel> latestNews = null;
 
-            var latest30News = _newsrepo.ReadAll().Where(x => x.IsDelete == false).OrderByDescending(x => x.pubDate).Take(batch * 30);
-            foreach(var news in latest30News)
+            if(req.sourceId == 0)
+            {
+                latestNews = _newsrepo.ReadAll().Where(x => x.IsDelete == false).OrderByDescending(x => x.pubDate).Take(req.batch * 8).Skip((req.batch - 1) * 8);
+            }
+            else
+            {
+                latestNews = _newsrepo.ReadAll().Where(x => x.IsDelete == false && x.RefSourceId == req.sourceId).OrderByDescending(x => x.pubDate).Take(req.batch * 8).Skip((req.batch - 1) * 8);
+            }
+
+            foreach(NewsModel news in latestNews)
             {
                 NewsResponse.LatestNews resPart = new NewsResponse.LatestNews()
                 {
@@ -61,35 +72,6 @@ namespace NewCenter.Controllers
             return Ok(res);
         }
 
-        // GET: api/News/LatestNews/5
-        // 取得特定sourceId的最新文章
-        //[HttpGet("{id}")]
-        //public IActionResult LatestNews(int sourceId)
-        //{ 
-        //    DateTime today = DateTime.Today.AddDays(-1);
-        //    DateTime tomorrow = DateTime.Today;
-        //    List<NewsResponse> res = new List<NewsResponse>();
-
-        //    var allNews = _newsrepo.ReadAll().Where(x => x.IsDelete == false && x.RefSourceId == sourceId).AsEnumerable<NewsModel>();
-        //    var latestNews = allNews.Where(x => DateTime.Compare(today, (DateTime)x.pubDate) < 0 && DateTime.Compare(tomorrow, (DateTime)x.pubDate) > 0);
-        //    foreach (var news in latestNews)
-        //    {
-        //        NewsResponse resPart = new NewsResponse()
-        //        {
-        //            Id = news.Id,
-        //            Title = news.Title,
-        //            Thumbnail = news.ThumbNail,
-        //            Url = news.Url,
-        //            pubDate = news.pubDate,
-        //            Logo = _sourcerepo.Read(x => x.Id == news.RefSourceId).Logo,
-        //            UpvoteCount = _upvoterepo.ReadAll().Where(x => x.RefNewsId == news.Id).Count(),
-        //            CommentCount = _commentrepo.ReadAll().Where(x => x.RefNewsId == news.Id).Count(),
-        //        };
-        //        res.Add(resPart);
-        //    }
-
-        //    return Ok(res);
-        //}
 
         //// POST: api/News
         //[HttpPost]

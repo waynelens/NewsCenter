@@ -8,11 +8,8 @@ using NewCenter.Models;
 using NewCenter.Repository;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using System.Xml;
+using NewCenter.Services;
 
 namespace NewCenter.Services
 {
@@ -32,6 +29,7 @@ namespace NewCenter.Services
 
         public void updateDailyNews()
         {
+            TimeService timeParser = new TimeService();
             IEnumerable<SourceModel> allSources = _sourceRepo.ReadAll().Where(x => x.IsDelete == false && x.Name != "Reviewing").AsEnumerable<SourceModel>();
             IEnumerable<NewsModel> allNews = _newsRepo.ReadAll().AsEnumerable<NewsModel>();
             List<NewsModel> willAddNews = new List<NewsModel>();
@@ -52,7 +50,7 @@ namespace NewCenter.Services
                             Url = rss20Item.Link,
                             ThumbNail = "nothing",
                             Title = rss20Item.Title,
-                            pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : rss20Item.PublishingDate,
+                            pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(rss20Item.PublishingDateString),
                             RefSourceId = source.Id
                         };
                         if(allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
@@ -75,7 +73,7 @@ namespace NewCenter.Services
                             Url = atomItem.Links.Last().ToString(),
                             ThumbNail = "nothing",
                             Title = atomItem.Title,
-                            pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : atomItem.PublishedDate,
+                            pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : timeParser.parseTimetoUTC(atomItem.PublishedDateString),
                             RefSourceId = source.Id
                         };
                         if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
@@ -98,8 +96,8 @@ namespace NewCenter.Services
                             Url = mediaItem.Link,
                             ThumbNail = "nothing",
                             Title = mediaItem.Title,
-                            pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : mediaItem.PublishingDate,
-                            RefEditorId = source.Id
+                            pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(mediaItem.PublishingDateString),
+                            RefSourceId = source.Id
                         };
                         if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
                         {

@@ -18,7 +18,7 @@ namespace NewCenter.Services
 
         public DateTime parseTimetoUTC(string rawTime)
         {
-            string replaceTime = "";
+            string replaceTime = rawTime;
             foreach (string key in timeZone.Keys)
             {
                 if (rawTime.Contains(key))

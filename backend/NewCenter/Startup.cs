@@ -84,6 +84,7 @@ namespace NewCenter
 
             });
 
+            //BackgroundJob.Enqueue((IRssService service) => service.updateDailyNews());
             RecurringJob.AddOrUpdate("UpdateDailyNewsTask", (IRssService service) => service.updateDailyNews(), Cron.Daily);
         }
     }
