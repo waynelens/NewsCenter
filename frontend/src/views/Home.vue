@@ -140,7 +140,7 @@ export default class Home extends Vue {
   @Watch("sourceStatus")
   displayPartLatestNews(val: number, oldVal: number) {
     this.latestNewsBatch = 1;
-    this.articles.length = 0;
+    this.articles = [];
     
     if (val != 0) {
       const req: ILatestNewsModel = {

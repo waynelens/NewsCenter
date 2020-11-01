@@ -40,7 +40,7 @@
       </v-dialog>
     </div>
 
-    <CoreLinkList :searchReq="sourceSearchValue"></CoreLinkList>
+    <CoreLinkList :searchReq="sourceSearchValue" id="link-list"></CoreLinkList>
 
     <div id="sourceSearchBar">
       <v-text-field
@@ -50,6 +50,7 @@
         v-model="sourceSearchValue"
       ></v-text-field>
     </div>
+
   </div>
 </template>
 
@@ -119,10 +120,9 @@ export default class PublicNavDrawer extends Vue {
   margin-left: 13%;
 }
 
-#sourceSearchBar {
-  position: fixed;
-  bottom: 0;
-  width: 100%;
+#link-list{
+  height: 85vh;
+  overflow-y: scroll;
 }
 </style>
 
