@@ -50,9 +50,18 @@ namespace NewCenter.Services
                             Url = rss20Item.Link,
                             ThumbNail = "nothing",
                             Title = rss20Item.Title,
-                            pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(rss20Item.PublishingDateString),
+                            //pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(rss20Item.PublishingDateString),
                             RefSourceId = source.Id
                         };
+                        try
+                        {
+                            // 時間各種寫法...
+                            oneNews.pubDate = String.IsNullOrEmpty(rss20Item.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(rss20Item.PublishingDateString);
+                        }
+                        catch(Exception e)
+                        {
+                            oneNews.pubDate = DateTime.MinValue;
+                        }
                         if(allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
                         {
                             willAddNews.Add(oneNews);
@@ -73,9 +82,19 @@ namespace NewCenter.Services
                             Url = atomItem.Links.Last().ToString(),
                             ThumbNail = "nothing",
                             Title = atomItem.Title,
-                            pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : timeParser.parseTimetoUTC(atomItem.PublishedDateString),
+                            //pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : timeParser.parseTimetoUTC(atomItem.PublishedDateString),
                             RefSourceId = source.Id
                         };
+                        try
+                        {
+                            // 時間各種寫法...
+                            oneNews.pubDate = String.IsNullOrEmpty(atomItem.PublishedDateString) ? DateTime.Now : timeParser.parseTimetoUTC(atomItem.PublishedDateString);
+                        }
+                        catch (Exception e)
+                        {
+                            oneNews.pubDate = DateTime.MinValue;
+                            continue;
+                        }
                         if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
                         {
                             willAddNews.Add(oneNews);
@@ -96,9 +115,19 @@ namespace NewCenter.Services
                             Url = mediaItem.Link,
                             ThumbNail = "nothing",
                             Title = mediaItem.Title,
-                            pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(mediaItem.PublishingDateString),
+                            //pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(mediaItem.PublishingDateString),
                             RefSourceId = source.Id
                         };
+                        try
+                        {
+                            // 時間各種寫法...
+                            oneNews.pubDate = String.IsNullOrEmpty(mediaItem.PublishingDateString) ? DateTime.Now : timeParser.parseTimetoUTC(mediaItem.PublishingDateString);
+                        }
+                        catch (Exception e)
+                        {
+                            oneNews.pubDate = DateTime.MinValue;
+                            continue;
+                        }
                         if (allNews.Where(x => x.Url == oneNews.Url).Count() == 0)
                         {
                             willAddNews.Add(oneNews);

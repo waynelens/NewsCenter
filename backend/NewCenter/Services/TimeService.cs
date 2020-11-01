@@ -12,6 +12,8 @@ namespace NewCenter.Services
             { "PDT","-0700"},
             { "PST","-0800" },
             { "UTC","+0000"},
+            { "GMT+0000","+0000" },
+            {"+0000 (Coordinated Universal Time)","+0000" }
         };
 
         public string format = "ddd, dd MMM yyyy HH:mm:ss zzz";
